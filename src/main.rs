@@ -20,7 +20,12 @@ fn main() {
                 }
             }
             "-r" | "--remove" => {
-                let _ = tasks.remove_task(0);
+                let num_str = &args[2];
+                let num = num_str.parse().expect("expected argument to be a number");
+
+                if let Err(e) = tasks.remove_task(num) {
+                    println!("error removing task: {}", e);
+                }
             }
             "-t" | "--todo" => tasks.list_tasks(),
             _ => {
