@@ -75,8 +75,8 @@ impl Tasks {
     }
 
     fn write_json(&self) -> Result<(), Error> {
-        let mut file = OpenOptions::new().write(true).open("./tmp.json")?;
-        serde_json::to_writer(&mut file, &self)?;
+        let json = serde_json::to_string(&self)?;
+        fs::write("tmp.json", &json).expect("unable to edit tasks file");
 
         Ok(())
     }
