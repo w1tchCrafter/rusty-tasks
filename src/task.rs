@@ -56,6 +56,12 @@ impl Tasks {
     }
 
     pub fn remove_task(&mut self, task_num: u32) -> Result<(), Error> {
+        if self.todo.len() != 0 {
+            if task_num > (self.todo.len() - 1).try_into().unwrap() {
+                ()
+            }
+        }
+
         let rm: Vec<Task> = self
             .todo
             .drain(..)
