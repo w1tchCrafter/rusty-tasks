@@ -1,6 +1,7 @@
 use std::env;
 
 mod task;
+mod utils;
 
 fn main() {
     let args: Vec<String> = env::args().collect();

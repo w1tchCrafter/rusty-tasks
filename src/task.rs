@@ -1,6 +1,5 @@
 use std::fs;
 use std::fs::File;
-use std::fs::OpenOptions;
 use std::io::BufWriter;
 use std::io::Error;
 use std::result::Result;
