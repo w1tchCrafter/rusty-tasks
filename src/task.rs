@@ -12,7 +12,6 @@ use serde::Serialize;
 struct Task {
     text: String,
     number: u32,
-    completed: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
