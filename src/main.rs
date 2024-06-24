@@ -5,6 +5,7 @@ mod utils;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    let _ = utils::setup();
 
     if args.len() == 1 {
         println!("Invalid number of arguments!");

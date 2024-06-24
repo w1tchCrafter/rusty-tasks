@@ -45,7 +45,6 @@ impl Tasks {
         self.todo.push(Task {
             text: t.to_string(),
             number: self.todo.len() as u32,
-            completed: false,
         });
 
         self.write_json()?;
