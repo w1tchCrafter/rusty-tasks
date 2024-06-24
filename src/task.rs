@@ -18,19 +18,23 @@ struct Task {
 pub struct Tasks {
     completed: Vec<Task>,
     todo: Vec<Task>,
+    #[serde(skip)]
+    path: String,
 }
 
 impl Tasks {
-    pub fn new() -> Self {
-        if let Ok(task_str) = fs::read_to_string("./tmp.json") {
-            let json_tasks = serde_json::from_str(&task_str).unwrap();
+    pub fn new(path: &str) -> Self {
+        if let Ok(task_str) = fs::read_to_string(path) {
+            let mut json_tasks: Tasks = serde_json::from_str(&task_str).unwrap();
+            json_tasks.path = path.to_string();
             json_tasks
         } else {
-            let file = File::create("./tmp.json").unwrap();
+            let file = File::create(path).unwrap();
             let mut writer = BufWriter::new(file);
             let json_tasks = Self {
                 completed: Vec::new(),
                 todo: Vec::new(),
+                path: path.to_string()
             };
 
             if let Err(err) = serde_json::to_writer(&mut writer, &json_tasks) {
@@ -73,7 +77,7 @@ impl Tasks {
 
     fn write_json(&self) -> Result<(), Error> {
         let json = serde_json::to_string(&self)?;
-        fs::write("tmp.json", &json).expect("unable to edit tasks file");
+        fs::write(&self.path, &json).expect("unable to edit tasks file");
 
         Ok(())
     }

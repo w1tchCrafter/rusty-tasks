@@ -5,37 +5,43 @@ mod utils;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let _ = utils::setup();
 
     if args.len() == 1 {
         println!("Invalid number of arguments!");
         usage(&args[0], false);
         return;
-    } else if args.len() >= 2 {
-        let mut tasks = task::Tasks::new();
+    }
 
-        match args[1].as_str() {
-            "--help" | "-h" => usage(&args[0], true),
-            "-a" | "--add" => {
-                if let Err(e) = tasks.add_task(&args[2]) {
-                    println!("error adding new task: {:?}", e);
-                }
-            }
-            "-r" | "--remove" => {
-                let num_str = &args[2];
-                let num = num_str.parse().expect("expected argument to be a number");
+    let _ = utils::setup();
+    let homedir = match utils::home_dir() {
+        Ok(home) => home,
+        Err(err) => panic!("{}", err)
+    };
 
-                if let Err(e) = tasks.remove_task(num) {
-                    println!("error removing task: {}", e);
-                }
-            }
-            "-t" | "--todo" => tasks.list_tasks(),
-            _ => {
-                println!("Invalid argument");
-                usage(&args[0], false);
+    let mut tasks = task::Tasks::new(&format!("{}/{}", homedir, "tasks.json"));
+
+    match args[1].as_str() {
+        "--help" | "-h" => usage(&args[0], true),
+        "-a" | "--add" => {
+            if let Err(e) = tasks.add_task(&args[2]) {
+                println!("error adding new task: {:?}", e);
             }
         }
+        "-r" | "--remove" => {
+            let num_str = &args[2];
+            let num = num_str.parse().expect("expected argument to be a number");
+
+            if let Err(e) = tasks.remove_task(num) {
+                println!("error removing task: {}", e);
+            }
+        }
+        "-t" | "--todo" => tasks.list_tasks(),
+        _ => {
+            println!("Invalid argument");
+            usage(&args[0], false);
+        }
     }
+    
 }
 
 fn usage(name: &str, help: bool) {

@@ -3,7 +3,7 @@ use std::path::Path;
 
 use dirs;
 
-fn home_dir() -> Result<String, String> {
+pub fn home_dir() -> Result<String, String> {
     match dirs::home_dir() {
         Some(path) => {
             match path.to_str() {
